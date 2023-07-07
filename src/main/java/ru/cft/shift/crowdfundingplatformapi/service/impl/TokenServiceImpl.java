@@ -1,4 +1,4 @@
-package ru.cft.shift.crowdfundingplatformapi.service.token;
+package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -9,10 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.cft.shift.crowdfundingplatformapi.dto.TokenData;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.PersonRole;
 import ru.cft.shift.crowdfundingplatformapi.exception.UnauthorizedException;
+import ru.cft.shift.crowdfundingplatformapi.security.TokenData;
+import ru.cft.shift.crowdfundingplatformapi.service.TokenService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

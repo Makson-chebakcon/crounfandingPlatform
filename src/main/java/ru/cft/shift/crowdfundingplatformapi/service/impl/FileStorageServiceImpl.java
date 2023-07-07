@@ -1,4 +1,4 @@
-package ru.cft.shift.crowdfundingplatformapi.service.filestorage;
+package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
@@ -14,6 +14,7 @@ import ru.cft.shift.crowdfundingplatformapi.entity.FileMetaInformation;
 import ru.cft.shift.crowdfundingplatformapi.exception.InternalException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.repository.MetaInformationRepository;
+import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

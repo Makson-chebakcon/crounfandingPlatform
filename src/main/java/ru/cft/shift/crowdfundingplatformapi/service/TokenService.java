@@ -1,8 +1,8 @@
-package ru.cft.shift.crowdfundingplatformapi.service.token;
+package ru.cft.shift.crowdfundingplatformapi.service;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.cft.shift.crowdfundingplatformapi.dto.TokenData;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
+import ru.cft.shift.crowdfundingplatformapi.security.TokenData;
 
 import java.util.Date;
 
