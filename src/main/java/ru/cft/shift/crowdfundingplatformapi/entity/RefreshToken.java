@@ -18,6 +18,9 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(length = 1024)
+    private String value;
+
     private Date createdAt;
 
     private Date expiredAt;

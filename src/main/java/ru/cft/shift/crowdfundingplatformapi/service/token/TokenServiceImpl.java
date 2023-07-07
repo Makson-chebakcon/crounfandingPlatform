@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.cft.shift.crowdfundingplatformapi.dto.TokenData;
+import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.PersonRole;
 import ru.cft.shift.crowdfundingplatformapi.exception.UnauthorizedException;
 
@@ -42,7 +43,7 @@ public class TokenServiceImpl implements TokenService {
     private int refreshTokenLifetime;
 
     @Override
-    public String generateAccessToken(UUID id, String email, PersonRole role) {
+    public String generateAccessToken(Person person) {
         Key key = Keys.hmacShaKeyFor(accessSecret.getBytes(StandardCharsets.UTF_8));
         Date expiresAt = Date.from(
                 Instant.now()
@@ -52,11 +53,11 @@ public class TokenServiceImpl implements TokenService {
                         )
         );
 
-        return generateToken(id, email, role, expiresAt, key);
+        return generateToken(person.getId(), person.getEmail(), person.getRole(), expiresAt, key);
     }
 
     @Override
-    public Pair<String, Date> generateRefreshTokenAndExpiresDate(UUID id, String email, PersonRole role) {
+    public Pair<String, Date> generateRefreshTokenAndExpiresDate(Person person) {
         Key key = Keys.hmacShaKeyFor(refreshSecret.getBytes(StandardCharsets.UTF_8));
         Date expiresAt = Date.from(
                 Instant.now()
@@ -66,7 +67,7 @@ public class TokenServiceImpl implements TokenService {
                         )
         );
 
-        return Pair.of(generateToken(id, email, role, expiresAt, key), expiresAt);
+        return Pair.of(generateToken(person.getId(), person.getEmail(), person.getRole(), expiresAt, key), expiresAt);
     }
 
     @Override

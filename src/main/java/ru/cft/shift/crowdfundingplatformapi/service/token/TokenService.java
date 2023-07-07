@@ -2,16 +2,15 @@ package ru.cft.shift.crowdfundingplatformapi.service.token;
 
 import org.apache.commons.lang3.tuple.Pair;
 import ru.cft.shift.crowdfundingplatformapi.dto.TokenData;
-import ru.cft.shift.crowdfundingplatformapi.enumeration.PersonRole;
+import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 
 import java.util.Date;
-import java.util.UUID;
 
 public interface TokenService {
 
-    String generateAccessToken(UUID id, String email, PersonRole role);
+    String generateAccessToken(Person person);
 
-    Pair<String, Date> generateRefreshTokenAndExpiresDate(UUID id, String email, PersonRole role);
+    Pair<String, Date> generateRefreshTokenAndExpiresDate(Person person);
 
     TokenData decodeAccessToken(String token);
 
