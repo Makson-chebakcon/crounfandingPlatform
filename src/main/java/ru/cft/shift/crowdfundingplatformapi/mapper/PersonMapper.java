@@ -1,7 +1,7 @@
 package ru.cft.shift.crowdfundingplatformapi.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.cft.shift.crowdfundingplatformapi.dto.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 
 @Component

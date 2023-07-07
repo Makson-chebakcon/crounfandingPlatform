@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.cft.shift.crowdfundingplatformapi.dto.ApiError;
+import ru.cft.shift.crowdfundingplatformapi.dto.api.ApiError;
 import ru.cft.shift.crowdfundingplatformapi.service.TokenService;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
             Authentication authentication = new JwtAuthentication(tokenData);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception exception) {
-            sendError(response);
+            sendError(request, response);
             return;
         }
 
@@ -60,9 +60,9 @@ public class JwtFilter extends OncePerRequestFilter {
         return !request.getRequestURI().startsWith("/api");
     }
 
-    private void sendError(HttpServletResponse response) throws IOException {
+    private void sendError(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.error("Токен отсутствовал или не прошел верификацию");
-        ApiError apiError = new ApiError(401, "Не авторизован");
+        ApiError apiError = new ApiError(401, request.getMethod(), request.getRequestURI(), "Не авторизован");
         String responseBody = objectMapper.writeValueAsString(apiError);
 
         response.setStatus(401);

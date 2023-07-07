@@ -3,7 +3,7 @@ package ru.cft.shift.crowdfundingplatformapi.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.cft.shift.crowdfundingplatformapi.dto.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.PersonMapper;
