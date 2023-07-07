@@ -28,10 +28,12 @@ public class Person {
     private String name;
 
     @Column(nullable = false)
-    private String fullName;
+    private String surname;
 
     @Column(nullable = false)
     private String patronymic;
+
+    private String bio;
 
     @Column(nullable = false)
     private String email;
