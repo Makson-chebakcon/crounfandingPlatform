@@ -24,3 +24,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+tokens:
+  access-secret-key: access-secret-key-access-secret-key-access-secret-key-access-secret-key
+  refresh-secret-key: refresh-secret-key-refresh-secret-key-refresh-secret-key-refresh-secret-key
+  access-lifetime-min: 30
+  refresh-lifetime-days: 30
