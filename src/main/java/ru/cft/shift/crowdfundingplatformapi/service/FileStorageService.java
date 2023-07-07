@@ -1,4 +1,4 @@
-package ru.cft.shift.crowdfundingplatformapi.service.filestorage;
+package ru.cft.shift.crowdfundingplatformapi.service;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;

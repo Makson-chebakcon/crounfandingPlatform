@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.cft.shift.crowdfundingplatformapi.dto.FileMetaInformationDto;
-import ru.cft.shift.crowdfundingplatformapi.service.filestorage.FileStorageService;
+import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
 
 import java.util.UUID;
 
