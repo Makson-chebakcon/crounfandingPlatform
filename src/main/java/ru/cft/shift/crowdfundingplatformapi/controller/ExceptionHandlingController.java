@@ -1,4 +1,4 @@
-package ru.cft.shift.crowdfundingplatformapi.configuration;
+package ru.cft.shift.crowdfundingplatformapi.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

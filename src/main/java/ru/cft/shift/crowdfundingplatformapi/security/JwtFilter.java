@@ -11,12 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.cft.shift.crowdfundingplatformapi.dto.api.ApiError;
 import ru.cft.shift.crowdfundingplatformapi.service.TokenService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -25,6 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final String CHAR_ENCODING = "UTF-8";
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    private final EndpointsPermitAll endpointsPermitAll;
     private final TokenService tokenService;
     private final ObjectMapper objectMapper;
 
@@ -34,13 +37,6 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         String authorizationValue = request.getHeader(AUTHORIZATION_HEADER);
-
-        //TODO переделать на основе белого или черного списка запросов
-
-        if (authorizationValue == null || authorizationValue.isEmpty()) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         try {
             String token = authorizationValue.substring(7);
@@ -56,8 +52,17 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-        return !request.getRequestURI().startsWith("/api");
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+        List<AntPathRequestMatcher> requestMatchers = endpointsPermitAll.getRequestMatchers();
+
+        for (AntPathRequestMatcher requestMatcher : requestMatchers) {
+            if (!request.getRequestURI().startsWith("/api") ||
+                    requestMatcher.matcher(request).isMatch()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void sendError(HttpServletRequest request, HttpServletResponse response) throws IOException {
