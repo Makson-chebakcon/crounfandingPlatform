@@ -2,6 +2,7 @@ package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,13 @@ import ru.cft.shift.crowdfundingplatformapi.exception.UnauthorizedException;
 import ru.cft.shift.crowdfundingplatformapi.repository.PersonRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.RefreshTokenRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.AuthService;
+import ru.cft.shift.crowdfundingplatformapi.service.MailService;
 import ru.cft.shift.crowdfundingplatformapi.service.TokenService;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -30,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Override
     public TokensDto register(CreatePersonDto createPersonDto) {
@@ -50,6 +54,8 @@ public class AuthServiceImpl implements AuthService {
         person = personRepository.save(person);
         String accessToken = tokenService.generateAccessToken(person);
         String refreshToken = getAndSaveRefreshToken(person);
+
+        mailService.newUserMessage(person);
 
         return new TokensDto(accessToken, refreshToken);
     }

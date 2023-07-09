@@ -24,6 +24,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: smtp.yandex.ru
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    port: 465
+    protocol: smtps
 
 tokens:
   access-secret-key: access-secret-key-access-secret-key-access-secret-key-access-secret-key
