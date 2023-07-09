@@ -30,3 +30,17 @@ tokens:
   refresh-secret-key: refresh-secret-key-refresh-secret-key-refresh-secret-key-refresh-secret-key
   access-lifetime-min: 30
   refresh-lifetime-days: 30
+
+security:
+  permit-all:
+    endpoints:
+      - pattern: /api/login
+        method: POST
+      - pattern: /api/refresh
+        method: POST
+      - pattern: /api/unsecured
+        method: GET
+      - pattern: /api/machines/*
+        method: GET
+      - pattern: /api/dormitories
+        method: GET
