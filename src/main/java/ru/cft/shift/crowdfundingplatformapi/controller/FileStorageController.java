@@ -1,6 +1,7 @@
 package ru.cft.shift.crowdfundingplatformapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
+@Tag(name = "Настоящие")
 public class FileStorageController {
 
     private final FileStorageService fileStorageService;
@@ -27,7 +29,6 @@ public class FileStorageController {
 
     @Operation(summary = "Загрузить файл в файловое хранилище")
     @PostMapping(
-            value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -35,8 +36,8 @@ public class FileStorageController {
         return ResponseEntity.ok(fileStorageService.uploadFile(file));
     }
 
-    @Operation(summary = "Скачать файл их файлового хранилища")
-    @GetMapping(value = "/download/{fileId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @Operation(summary = "Скачать файл из файлового хранилища")
+    @GetMapping(value = "/{fileId}/meta-inf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> downloadFile(@PathVariable UUID fileId) {
         Pair<String, byte[]> fileAndFilename = fileStorageService.downloadFileAndFilename(fileId);
 
