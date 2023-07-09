@@ -2,7 +2,8 @@ package ru.cft.shift.crowdfundingplatformapi.service;
 
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CreatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CredentialsDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.TokensDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.RefreshTokenDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.TokensDto;
 
 public interface AuthService {
 
@@ -10,4 +11,5 @@ public interface AuthService {
 
     TokensDto login(CredentialsDto credentialsDto);
 
+    TokensDto refreshTokens(RefreshTokenDto refreshToken);
 }
