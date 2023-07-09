@@ -1,12 +1,14 @@
 package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CreatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CredentialsDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.TokensDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.RefreshTokenDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.TokensDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.entity.RefreshToken;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.PersonRole;
@@ -65,6 +67,27 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = tokenService.generateAccessToken(person);
         String refreshToken = getAndSaveRefreshToken(person);
 
+
+        return new TokensDto(accessToken, refreshToken);
+    }
+
+    @Transactional
+    @Override
+    public TokensDto refreshTokens(RefreshTokenDto refreshTokenDto) {
+        RefreshToken token = refreshTokenRepository
+                .findByValue(refreshTokenDto.getRefreshToken())
+                .orElseThrow(() -> new UnauthorizedException("Некорректный токен"));
+
+        if (!token.getExpiredAt().before(new Date())) {
+            throw new UnauthorizedException("Срок действия токена истёк");
+        }
+
+        refreshTokenRepository.delete(token);
+
+        Person person = token.getOwner();
+
+        String accessToken = tokenService.generateAccessToken(person);
+        String refreshToken = getAndSaveRefreshToken(person);
 
         return new TokensDto(accessToken, refreshToken);
     }

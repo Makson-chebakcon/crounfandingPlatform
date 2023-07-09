@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CreatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.CredentialsDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.TokensDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.RefreshTokenDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.token.TokensDto;
 import ru.cft.shift.crowdfundingplatformapi.service.AuthService;
 
 @RestController
@@ -32,6 +33,12 @@ public class AuthController {
     @PostMapping("/login")
     ResponseEntity<TokensDto> login(@RequestBody @Valid CredentialsDto credentialsDto) {
         return ResponseEntity.ok(authService.login(credentialsDto));
+    }
+
+    @Operation(summary = "Обновить пару токенов")
+    @PostMapping("/tokens")
+    ResponseEntity<TokensDto> refreshTokens(@RequestBody @Valid RefreshTokenDto refreshToken) {
+        return ResponseEntity.ok(authService.refreshTokens(refreshToken));
     }
 
 }
