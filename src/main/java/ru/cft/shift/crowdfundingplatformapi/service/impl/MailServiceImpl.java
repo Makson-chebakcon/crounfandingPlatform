@@ -29,10 +29,10 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.mail.username}")
     private String username;
 
-    @Value("${server.hostname}")
+    @Value("${application.hostname}")
     private String hostname;
 
-    @Value("${server.port}")
+    @Value("${application.port}")
     private String port;
 
     @PostConstruct
