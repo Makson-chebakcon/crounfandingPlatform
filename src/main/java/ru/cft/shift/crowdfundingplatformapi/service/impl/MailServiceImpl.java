@@ -1,5 +1,6 @@
 package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,13 +17,24 @@ public class MailServiceImpl implements MailService {
 
     private static final String NEW_USER_SUBJECT = "Регистрация на платформе";
     private static final String NEW_USER_TEXT = "%s %s %s, вы только что создали аккаунт на платформе. " +
-            "Вы можете подтвердить эту почту через личный кабинет платформы. Приятного использования!";
+            "Чтобы подтвердить почту вам необходимо перейти по ссылке " +
+            "%s/api/v1/confirm-email?personId=%s&confirmCode=%s. Срок действия ссылки истечек через 60 минут";
 
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String username;
-//T58!!SGUCkj4KEg
+
+    @Value("${server.hostname}")
+    private String hostname;
+
+    @Value("${server.port}")
+    private String port;
+
+    @PostConstruct
+    private void init() {
+        log.info("hostname: {}", hostname);
+    }
 
     @Override
     public void newUserMessage(Person person) {
@@ -31,7 +43,10 @@ public class MailServiceImpl implements MailService {
                 String.format(NEW_USER_TEXT,
                         person.getName(),
                         person.getSurname(),
-                        person.getPatronymic()
+                        person.getPatronymic(),
+                        hostname + ":" + port,
+                        person.getId(),
+                        person.getEmailConfirmCode()
                 ),
                 person.getEmail()
         );

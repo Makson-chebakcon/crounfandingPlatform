@@ -8,4 +8,6 @@ public interface ProfileService {
 
     FullPersonDto getFullPersonDto(UUID personId);
 
+    String confirmEmailAndGetFullName(UUID personId, UUID confirmCode);
+
 }

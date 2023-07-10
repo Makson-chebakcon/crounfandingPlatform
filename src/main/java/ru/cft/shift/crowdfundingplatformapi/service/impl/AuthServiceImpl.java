@@ -22,7 +22,9 @@ import ru.cft.shift.crowdfundingplatformapi.service.MailService;
 import ru.cft.shift.crowdfundingplatformapi.service.TokenService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -49,6 +51,9 @@ public class AuthServiceImpl implements AuthService {
                 .money(BigDecimal.ZERO)
                 .role(PersonRole.ROLE_USER)
                 .password(passwordEncoder.encode(createPersonDto.getPassword()))
+                .emailConfirmCode(UUID.randomUUID())
+                .emailIsConfirm(false)
+                .emailConfirmCodeExpiresAt(LocalDateTime.now().plusMinutes(60))
                 .build();
 
         person = personRepository.save(person);
