@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.cft.shift.crowdfundingplatformapi.dto.api.ApiError;
+import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.ConflictException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.exception.UnauthorizedException;
@@ -61,17 +62,22 @@ public class ExceptionHandlingController {
         return new ResponseEntity<>(error, httpStatus);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(HttpServletRequest request,
+                                                              BadRequestException exception) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        logError(request, exception);
+        ApiError error = buildApiError(request, httpStatus, exception.getMessage());
+
+        return new ResponseEntity<>(error, httpStatus);
+    }
+
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(HttpServletRequest request,
                                                                 UnauthorizedException exception) {
-        logError(request, exception);
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-        ApiError error = new ApiError(
-                httpStatus.value(),
-                request.getRequestURI(),
-                request.getMethod(),
-                exception.getMessage()
-        );
+        logError(request, exception);
+        ApiError error = buildApiError(request, httpStatus, exception.getMessage());
 
         return new ResponseEntity<>(error, httpStatus);
     }
@@ -79,14 +85,9 @@ public class ExceptionHandlingController {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(HttpServletRequest request,
                                                             NotFoundException exception) {
-        logError(request, exception);
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        ApiError error = new ApiError(
-                httpStatus.value(),
-                request.getRequestURI(),
-                request.getMethod(),
-                exception.getMessage()
-        );
+        logError(request, exception);
+        ApiError error = buildApiError(request, httpStatus, exception.getMessage());
 
         return new ResponseEntity<>(error, httpStatus);
     }
@@ -94,14 +95,9 @@ public class ExceptionHandlingController {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiError> handleConflictException(HttpServletRequest request,
                                                             ConflictException exception) {
-        logError(request, exception);
         HttpStatus httpStatus = HttpStatus.CONFLICT;
-        ApiError error = new ApiError(
-                httpStatus.value(),
-                request.getMethod(),
-                exception.getMessage(),
-                request.getRequestURI()
-        );
+        logError(request, exception);
+        ApiError error = buildApiError(request, httpStatus, exception.getMessage());
 
         return new ResponseEntity<>(error, httpStatus);
     }
@@ -109,18 +105,22 @@ public class ExceptionHandlingController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(HttpServletRequest request,
                                                     Exception exception) {
-        logError(request, exception);
-
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        ApiError error = new ApiError(
-                httpStatus.value(),
-                request.getRequestURI(),
-                request.getMethod(),
-                "Непредвиденная внутренняя ошибка сервера"
-        );
+        logError(request, exception);
+        ApiError error = buildApiError(request, httpStatus, "Непредвиденная внутренняя ошибка сервера");
 
         return new ResponseEntity<>(error, httpStatus);
+    }
+
+    private ApiError buildApiError(HttpServletRequest request,
+                                   HttpStatus status,
+                                   String message) {
+        return new ApiError(
+                status.value(),
+                request.getRequestURI(),
+                request.getMethod(),
+                message
+        );
     }
 
     private void logError(HttpServletRequest request, Exception exception) {

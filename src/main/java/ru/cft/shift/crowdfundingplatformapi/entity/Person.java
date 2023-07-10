@@ -5,6 +5,7 @@ import lombok.*;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.PersonRole;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,13 @@ public class Person {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private Boolean emailIsConfirm;
+
+    private UUID emailConfirmCode;
+
+    private LocalDateTime emailConfirmCodeExpiresAt;
 
     @Column(nullable = false)
     private BigDecimal money;
