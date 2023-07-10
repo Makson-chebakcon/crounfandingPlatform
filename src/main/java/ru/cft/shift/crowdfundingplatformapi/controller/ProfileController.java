@@ -3,14 +3,14 @@ package ru.cft.shift.crowdfundingplatformapi.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 
 import java.util.UUID;
@@ -34,6 +34,12 @@ public class ProfileController {
     public ResponseEntity<FullPersonDto> getProfile(Authentication authentication) {
         UUID id = extractId(authentication);
         return ResponseEntity.ok(profileService.getFullPersonDto(id));
+    }
+
+    @Operation(summary = "Выслать на почту новый пароль")
+    @PostMapping("/reset-password")
+    public void sendNewPassword(@RequestBody @Valid ResetPasswordDto resetPasswordDto) {
+        profileService.sendNewPassword(resetPasswordDto);
     }
 
 }

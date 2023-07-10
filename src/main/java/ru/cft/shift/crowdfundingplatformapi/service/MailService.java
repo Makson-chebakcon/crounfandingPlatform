@@ -6,4 +6,6 @@ public interface MailService {
 
     void newUserMessage(Person person);
 
+    void sendNewPassword(Person person, String newPassword);
+
 }

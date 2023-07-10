@@ -20,6 +20,10 @@ public class MailServiceImpl implements MailService {
             "Чтобы подтвердить почту вам необходимо перейти по ссылке " +
             "%s/api/v1/confirm-email?personId=%s&confirmCode=%s. Срок действия ссылки истечек через 60 минут";
 
+    private static final String NEW_PASSWORD_SUBJECT = "Сгенерирован новый пароль";
+    private static final String NEW_PASSWORD_TEXT = "Вы запросили сброс пароля, поэтому чтобы попасть в ваш аккаунт " +
+            "необходимо аутентифицироваться с помощью нового пароля: '%s'.";
+
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
@@ -66,6 +70,23 @@ public class MailServiceImpl implements MailService {
                     exception
             );
         }
+    }
+
+    @Override
+    public void sendNewPassword(Person person, String newPassword) {
+        SimpleMailMessage message = buildMailMessage(
+                NEW_PASSWORD_SUBJECT,
+                String.format(NEW_PASSWORD_TEXT, newPassword),
+                person.getEmail()
+        );
+
+        try {
+            mailSender.send(message);
+            log.info("Письмо с новым паролем успешно отправлено");
+        } catch (Exception exception) {
+            log.error("Не удалось отправить письмо с новым паролем для пользователя с id {}", person.getId());
+        }
+
     }
 
     private SimpleMailMessage buildMailMessage(String subject, String text, String email) {
