@@ -36,7 +36,6 @@ spring:
     protocol: smtps
   flyway:
     enabled: true
-    locations: migration
 
 
 tokens:
