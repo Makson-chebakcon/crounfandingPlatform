@@ -55,5 +55,7 @@ public class Person {
     @OneToMany(mappedBy = "owner")
     private List<RefreshToken> refreshTokens;
 
+    @OneToMany(mappedBy = "author")
+    private List<Project> projects;
 
 }

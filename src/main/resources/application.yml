@@ -23,7 +23,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -34,12 +34,20 @@ spring:
     password: ${EMAIL_PASSWORD}
     port: 465
     protocol: smtps
+  flyway:
+    enabled: true
+    locations: migration
+
 
 tokens:
   access-secret-key: access-secret-key-access-secret-key-access-secret-key-access-secret-key
   refresh-secret-key: refresh-secret-key-refresh-secret-key-refresh-secret-key-refresh-secret-key
   access-lifetime-min: 30
   refresh-lifetime-days: 30
+
+admin:
+  email: admin@domain.org
+  password: root
 
 security:
   permit-all:
@@ -58,3 +66,5 @@ security:
         method: POST
       - pattern: /api/v1/files/**
         method: GET
+      - pattern: /api/v1/projects/search
+        method: POST
