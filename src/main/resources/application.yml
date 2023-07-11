@@ -45,6 +45,10 @@ tokens:
   access-lifetime-min: 30
   refresh-lifetime-days: 30
 
+admin:
+  email: admin@domain.org
+  password: root
+
 security:
   permit-all:
     endpoints:

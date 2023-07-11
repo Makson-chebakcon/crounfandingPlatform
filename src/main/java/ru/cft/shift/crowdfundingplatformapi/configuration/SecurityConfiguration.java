@@ -32,6 +32,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         requests -> requests
                                 .requestMatchers(HttpMethod.POST, "api/v1/projects").authenticated()
+                                .requestMatchers(HttpMethod.GET, "api/v1/profiles").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "api/v1/persons/*/role").hasRole("ADMIN")
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

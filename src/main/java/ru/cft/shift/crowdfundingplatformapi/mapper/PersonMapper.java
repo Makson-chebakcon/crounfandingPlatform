@@ -1,23 +1,20 @@
 package ru.cft.shift.crowdfundingplatformapi.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.PersonDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 
-@Component
-public class PersonMapper {
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface PersonMapper {
 
-    public FullPersonDto entityToFullDto(Person entity) {
-        return new FullPersonDto(
-                entity.getId(),
-                entity.getRole(),
-                entity.getName(),
-                entity.getSurname(),
-                entity.getPatronymic(),
-                entity.getEmail(),
-                entity.getMoney(),
-                entity.getBio()
-        );
-    }
+    FullPersonDto entityToFullDto(Person entity);
+
+    PersonDto entityToDto(Person entity);
 
 }

@@ -7,7 +7,7 @@ CREATE TABLE person
     surname                       VARCHAR(512) NOT NULL,
     patronymic                    VARCHAR(512) NOT NULL,
     bio                           VARCHAR(32000),
-    email                         VARCHAR(512) NOT NULL,
+    email                         VARCHAR(512) NOT NULL UNIQUE,
     email_is_confirm              BOOLEAN      NOT NULL,
     email_confirm_code            UUID,
     email_confirm_code_expires_at TIMESTAMP,
