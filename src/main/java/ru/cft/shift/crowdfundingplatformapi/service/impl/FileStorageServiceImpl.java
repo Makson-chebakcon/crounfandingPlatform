@@ -18,6 +18,7 @@ import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -75,6 +76,20 @@ public class FileStorageServiceImpl implements FileStorageService {
             return Pair.of(filename, in.readAllBytes());
         } catch (Exception e) {
             throw new InternalException("Ошибка при скачивании файла из S3 c id = " + fileId, e);
+        }
+    }
+
+    @Override
+    public void existFiles(List<UUID> ids) {
+        for (UUID id : ids) {
+            existFile(id);
+        }
+    }
+
+    @Override
+    public void existFile(UUID id) {
+        if (!metaInformationRepository.existsById(id)) {
+            throw new NotFoundException("Файл с id " + id + " не найден");
         }
     }
 

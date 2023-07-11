@@ -83,7 +83,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     }
 
-    private Person getPersonById(UUID personId) {
+    @Override
+    public Person getPersonById(UUID personId) {
         return personRepository
                 .findById(personId)
                 .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = '%s' не найден", personId)));

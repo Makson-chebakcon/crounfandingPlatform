@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .cors(configurer -> configurer.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
                 .authorizeHttpRequests(
                         requests -> requests
-                                .requestMatchers(HttpMethod.GET, "api/v1/profiles").authenticated()
+                                .requestMatchers(HttpMethod.POST, "api/v1/projects").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

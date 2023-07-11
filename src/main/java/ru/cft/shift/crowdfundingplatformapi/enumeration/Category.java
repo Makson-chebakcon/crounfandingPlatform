@@ -1,6 +1,14 @@
 package ru.cft.shift.crowdfundingplatformapi.enumeration;
 
 public enum Category {
-    CATEGORY_1,
-    CATEGORY_2
+    CINEMA,
+    LITERATURE,
+    ART,
+    GAMES,
+    MUSIC,
+    SPORTS,
+    TRAVEL,
+    ECOLOGY_AND_NATURE,
+    PUBLIC_INITIATIVES,
+    CHARITY
 }

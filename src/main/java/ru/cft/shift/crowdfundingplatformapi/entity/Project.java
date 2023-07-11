@@ -38,6 +38,7 @@ public class Project {
     private Date creationDate;
 
     private Date finishDate;
+    private Boolean isApproved;
 
     @Enumerated(value = EnumType.STRING)
     private Category category;
