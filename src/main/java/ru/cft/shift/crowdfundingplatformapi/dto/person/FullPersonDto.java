@@ -20,4 +20,5 @@ public class FullPersonDto {
     private String email;
     private BigDecimal money;
     private String bio;
+    private Boolean emailIsConfirm;
 }
