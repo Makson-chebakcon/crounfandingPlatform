@@ -13,6 +13,7 @@ import ru.cft.shift.crowdfundingplatformapi.exception.ConflictException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.PersonMapper;
 import ru.cft.shift.crowdfundingplatformapi.repository.PersonRepository;
+import ru.cft.shift.crowdfundingplatformapi.repository.RefreshTokenRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.MailService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 import ru.cft.shift.crowdfundingplatformapi.util.PasswordGenerator;
@@ -30,6 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final PasswordGenerator passwordGenerator;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public FullPersonDto getFullPersonDto(UUID personId) {
@@ -74,9 +76,11 @@ public class ProfileServiceImpl implements ProfileService {
         if (personFits(person, dto.getName(), dto.getSurname(), dto.getPatronymic())) {
             String newPassword = passwordGenerator.generatePassword();
             person.setPassword(passwordEncoder.encode(newPassword));
-            personRepository.save(person);
+            person = personRepository.save(person);
             log.info("Новый пароль для пользователя с id {} успешно сгенерирован и сохранен", person.getId());
             mailService.sendNewPassword(person, newPassword);
+
+            refreshTokenRepository.deleteAll(person.getRefreshTokens());
         } else {
             log.error("ФИО для сброса пароля не совпало");
             throw new BadRequestException("Не удалось сбросить пароль, так как данные неверны");
