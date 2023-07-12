@@ -8,6 +8,9 @@ import ru.cft.shift.crowdfundingplatformapi.dto.api.PagingParamsResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.*;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.entity.Project;
+import ru.cft.shift.crowdfundingplatformapi.enumeration.Category;
+import ru.cft.shift.crowdfundingplatformapi.enumeration.Status;
+import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.ProjectMapper;
 import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
@@ -41,6 +44,11 @@ public class ProjectServiceImpl implements ProjectService {
         Person author = profileService.getPersonById(authorId);
 
         Project project = projectMapper.newDtoToEntity(dto);
+
+        if (project.getCategory() == Category.ALL) {
+            throw new BadRequestException("Категория ALL недоступна для создания проекта");
+        }
+
         project.setAuthor(author);
 
         projectRepository.save(project);
@@ -49,6 +57,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public PagingResponse<ProjectDto> getPublicProjects(ProjectPagingFilteringSortingRequest dto) {
         Project exampleEntity = projectMapper.filtersToEntity(dto.getFilteringParams());
+
+        if (exampleEntity.getCategory() == Category.ALL) {
+            exampleEntity.setCategory(null);
+        }
+
+        if (exampleEntity.getStatus() == Status.ALL) {
+            exampleEntity.setStatus(null);
+        }
+
         exampleEntity.setIsApproved(true);
 
         Example<Project> projectExample = Example.of(exampleEntity, buildExampleMatcher());
