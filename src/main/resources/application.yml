@@ -46,7 +46,7 @@ tokens:
 
 admin:
   email: admin@domain.org
-  password: root
+  password: 123456789
 
 security:
   permit-all:

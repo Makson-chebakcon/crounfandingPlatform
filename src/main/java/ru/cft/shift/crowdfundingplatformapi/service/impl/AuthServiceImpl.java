@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
                 .findByValue(refreshTokenDto.getRefreshToken())
                 .orElseThrow(() -> new UnauthorizedException("Некорректный токен"));
 
-        if (!token.getExpiredAt().before(new Date())) {
+        if (!token.getExpiredAt().after(new Date())) {
             throw new UnauthorizedException("Срок действия токена истёк");
         }
 
