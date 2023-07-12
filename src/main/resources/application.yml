@@ -67,5 +67,3 @@ security:
         method: GET
       - pattern: /api/v1/projects/search
         method: POST
-      - pattern: /api/v1/projects/*
-        method: GET

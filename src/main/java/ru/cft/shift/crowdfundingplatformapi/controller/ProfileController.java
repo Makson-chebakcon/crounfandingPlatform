@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 
 import java.util.UUID;
@@ -21,13 +22,13 @@ import static ru.cft.shift.crowdfundingplatformapi.util.JwtExtractor.extractId;
 @RestController
 @RequestMapping("/api/v1/profiles")
 @RequiredArgsConstructor
-@Tag(name = "Профиль")
+@Tag(name = "Настоящие")
 public class ProfileController {
 
     private final ProfileService profileService;
 
     @Operation(
-            summary = "Просмотр информации о себе.",
+            summary = "Просмотр информации о себе",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping
@@ -40,6 +41,14 @@ public class ProfileController {
     @PostMapping("/reset-password")
     public void sendNewPassword(@RequestBody @Valid ResetPasswordDto resetPasswordDto) {
         profileService.sendNewPassword(resetPasswordDto);
+    }
+
+    @Operation(summary = "Изменить профиль")
+    @PutMapping
+    public ResponseEntity<FullPersonDto> updateProfile(Authentication authentication,
+                                                       @RequestBody @Valid UpdatePersonDto dto) {
+        UUID id = extractId(authentication);
+        return ResponseEntity.ok(profileService.updateProfile(id, dto));
     }
 
 }

@@ -11,7 +11,6 @@ import ru.cft.shift.crowdfundingplatformapi.entity.Project;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.Category;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.Status;
 import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
-import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.ProjectMapper;
 import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
@@ -26,7 +25,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-    public static final String PROJECT_NOT_FOUND = "Проект с id %s не найден";
     private static final String TITLE_PROPERTY = "title";
     private static final String CATEGORY_PROPERTY = "category";
     private static final String STATUS_PROPERTY = "status";
@@ -87,19 +85,7 @@ public class ProjectServiceImpl implements ProjectService {
         );
 
         return new PagingResponse<>(pagingParamsResponse, projects);
-    }
 
-    @Override
-    public ProjectDto getPublicProject(UUID projectId) {
-        Project project = projectRepository
-                .findById(projectId)
-                .orElseThrow(() -> new NotFoundException(String.format(PROJECT_NOT_FOUND, projectId)));
-
-        if (project.getIsApproved().equals(Boolean.FALSE)) {
-            throw new NotFoundException(String.format(PROJECT_NOT_FOUND, projectId));
-        }
-
-        return projectMapper.entityToDto(project);
     }
 
     private Pageable buildPageable(ProjectPagingFilteringSortingRequest dto) {

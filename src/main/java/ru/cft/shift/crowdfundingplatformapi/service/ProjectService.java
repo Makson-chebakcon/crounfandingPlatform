@@ -12,7 +12,4 @@ public interface ProjectService {
     void createProject(UUID authorId, CreateProjectDto dto);
 
     PagingResponse<ProjectDto> getPublicProjects(ProjectPagingFilteringSortingRequest dto);
-
-    ProjectDto getPublicProject(UUID projectId);
-
 }
