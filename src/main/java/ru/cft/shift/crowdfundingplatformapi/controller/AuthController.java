@@ -18,7 +18,7 @@ import ru.cft.shift.crowdfundingplatformapi.service.AuthService;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Настоящие")
+@Tag(name = "Регистрация, логин")
 public class AuthController {
 
     private final AuthService authService;

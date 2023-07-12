@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.ConflictException;
@@ -88,6 +89,18 @@ public class ProfileServiceImpl implements ProfileService {
         return personRepository
                 .findById(personId)
                 .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = '%s' не найден", personId)));
+    }
+
+    @Override
+    public FullPersonDto updateProfile(UUID id, UpdatePersonDto dto) {
+        Person person = getPersonById(id);
+        person.setName(dto.getName());
+        person.setSurname(dto.getSurname());
+        person.setPatronymic(dto.getPatronymic());
+        person.setBio(dto.getBio());
+
+        person = personRepository.save(person);
+        return personMapper.entityToFullDto(person);
     }
 
     private boolean personFits(Person person, String name, String surname, String patronymic) {

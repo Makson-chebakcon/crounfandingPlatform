@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
-@Tag(name = "Настоящие")
+@Tag(name = "Файловое хранилище")
 public class FileStorageController {
 
     private final FileStorageService fileStorageService;
