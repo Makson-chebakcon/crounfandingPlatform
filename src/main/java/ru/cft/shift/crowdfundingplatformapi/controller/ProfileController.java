@@ -21,7 +21,7 @@ import static ru.cft.shift.crowdfundingplatformapi.util.JwtExtractor.extractId;
 @RestController
 @RequestMapping("/api/v1/profiles")
 @RequiredArgsConstructor
-@Tag(name = "Настоящие")
+@Tag(name = "Профиль")
 public class ProfileController {
 
     private final ProfileService profileService;

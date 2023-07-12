@@ -16,13 +16,13 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
-@Tag(name = "Настоящие")
+@Tag(name = "Файловое хранилище")
 public class FileStorageController {
 
     private final FileStorageService fileStorageService;
 
     @Operation(summary = "Получить метаинформацию о файле")
-    @GetMapping("/{fileId}")
+    @GetMapping("/{fileId}/meta-inf")
     public ResponseEntity<FileMetaInformationDto> getMetaInformation(@PathVariable UUID fileId) {
         return ResponseEntity.ok(fileStorageService.getFileMetaInformation(fileId));
     }
@@ -37,7 +37,7 @@ public class FileStorageController {
     }
 
     @Operation(summary = "Скачать файл из файлового хранилища")
-    @GetMapping(value = "/{fileId}/meta-inf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/{fileId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> downloadFile(@PathVariable UUID fileId) {
         Pair<String, byte[]> fileAndFilename = fileStorageService.downloadFileAndFilename(fileId);
 
