@@ -6,16 +6,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.CreateProjectDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.PagingResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectPagingFilteringSortingRequest;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectService;
-
-import java.util.UUID;
 
 import static ru.cft.shift.crowdfundingplatformapi.util.JwtExtractor.extractId;
 
@@ -23,7 +23,7 @@ import static ru.cft.shift.crowdfundingplatformapi.util.JwtExtractor.extractId;
 @RestController
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
-@Tag(name = "Проекты")
+@Tag(name = "Настоящие")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -38,16 +38,10 @@ public class ProjectController {
         projectService.createProject(extractId(auth), dto);
     }
 
-    @Operation(summary = "Получить публичные проекты.")
+    @Operation(summary = "Получить проекты.")
     @PostMapping("/search")
     public PagingResponse<ProjectDto> getProjects(@RequestBody @Valid ProjectPagingFilteringSortingRequest dto) {
         return projectService.getPublicProjects(dto);
-    }
-
-    @GetMapping("{projectId}")
-    @Operation(summary = "Получить публичный проект по id.")
-    public ResponseEntity<ProjectDto> getProject(@PathVariable UUID projectId) {
-        return ResponseEntity.ok(projectService.getPublicProject(projectId));
     }
 
 }
