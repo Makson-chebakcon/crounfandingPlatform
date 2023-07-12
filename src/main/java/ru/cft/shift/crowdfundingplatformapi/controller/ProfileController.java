@@ -43,7 +43,10 @@ public class ProfileController {
         profileService.sendNewPassword(resetPasswordDto);
     }
 
-    @Operation(summary = "Изменить профиль")
+    @Operation(
+            summary = "Изменить профиль",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PutMapping
     public ResponseEntity<FullPersonDto> updateProfile(Authentication authentication,
                                                        @RequestBody @Valid UpdatePersonDto dto) {
