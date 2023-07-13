@@ -7,9 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.ProjectRequestDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.api.PagingParamsRequest;
-import ru.cft.shift.crowdfundingplatformapi.dto.project.PagingResponse;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectRequestService;
 
 import java.util.UUID;

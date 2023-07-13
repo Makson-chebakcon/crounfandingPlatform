@@ -9,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.PersonDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.*;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 
 import java.util.UUID;
@@ -59,6 +57,15 @@ public class ProfileController {
     @GetMapping("/{personId}")
     public ResponseEntity<PersonDto> getProfileById(@PathVariable UUID personId) {
         return ResponseEntity.ok(profileService.getPersonDto(personId));
+    }
+
+    @Operation(
+            summary = "Поиск пользователей",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PostMapping("/search")
+    public PagingResponse<PersonDto> getProfiles(@RequestBody SearchPersonDto dto) {
+        return profileService.getProfiles(dto);
     }
 
 }

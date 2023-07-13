@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.api.PagingParamsResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.*;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
