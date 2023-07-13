@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import ru.cft.shift.crowdfundingplatformapi.security.JwtFilter;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
@@ -28,7 +30,15 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(configurer -> configurer.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+                .cors(configurer -> configurer.configurationSource(request -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedMethods(List.of("*"));
+                    corsConfiguration.setAllowedOrigins(List.of("*"));
+                    corsConfiguration.setAllowedMethods(List.of("*"));
+                    corsConfiguration.setMaxAge(3600L);
+
+                    return corsConfiguration;
+                }))
                 .authorizeHttpRequests(
                         requests -> requests
                                 .requestMatchers(HttpMethod.GET, "api/v1/persons/projects/**").authenticated()
