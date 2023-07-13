@@ -1,5 +1,6 @@
 package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -8,16 +9,19 @@ import ru.cft.shift.crowdfundingplatformapi.dto.api.PagingParamsResponse;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.*;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.entity.Project;
+import ru.cft.shift.crowdfundingplatformapi.entity.ProjectRequest;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.Category;
 import ru.cft.shift.crowdfundingplatformapi.enumeration.Status;
 import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.ProjectMapper;
 import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRepository;
+import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRequestRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,21 +41,27 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final FileStorageService fileStorageService;
     private final ProjectRepository projectRepository;
+    private final ProjectRequestRepository projectRequestRepository;
 
+    @Transactional
     @Override
     public void createProject(UUID authorId, CreateProjectDto dto) {
-        fileStorageService.existFile(dto.getAvatarId());
-        fileStorageService.existFiles(dto.getAttachmentIds());
-
-        Person author = profileService.getPersonById(authorId);
-
-        Project project = projectMapper.newDtoToEntity(dto);
-
-        if (project.getCategory() == Category.ALL) {
+        if (dto.getCategory() == Category.ALL) {
             throw new BadRequestException("Категория ALL недоступна для создания проекта");
         }
 
+        fileStorageService.existFile(dto.getAvatarId());
+        fileStorageService.existFiles(dto.getAttachmentIds());
+
+        ProjectRequest projectRequest = ProjectRequest.builder()
+                .creationDate(new Date())
+                .build();
+        projectRequest = projectRequestRepository.save(projectRequest);
+
+        Person author = profileService.getPersonById(authorId);
+        Project project = projectMapper.newDtoToEntity(dto);
         project.setAuthor(author);
+        project.setRequest(projectRequest);
 
         projectRepository.save(project);
     }
