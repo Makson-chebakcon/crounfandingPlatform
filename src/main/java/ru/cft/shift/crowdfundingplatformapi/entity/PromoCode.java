@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -23,5 +24,7 @@ public class PromoCode {
     private UUID id;
 
     private String value;
+
+    private BigDecimal cost;
 
 }
