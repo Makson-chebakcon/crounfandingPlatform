@@ -16,12 +16,14 @@ import ru.cft.shift.crowdfundingplatformapi.enumeration.Status;
 import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.ProjectMapper;
+import ru.cft.shift.crowdfundingplatformapi.repository.PersonRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.ProjectRequestRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.FileStorageService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final FileStorageService fileStorageService;
     private final ProjectRepository projectRepository;
     private final ProjectRequestRepository projectRequestRepository;
+    private final PersonRepository personRepository;
 
     @Transactional
     @Override
@@ -102,13 +105,39 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public FullProjectDto getPublicProject(UUID projectId) {
-        Project project = projectRepository
-                .findById(projectId)
-                .orElseThrow(() -> new NotFoundException(String.format(PROJECT_NOT_FOUND, projectId)));
+        Project project = getProjectById(projectId);
 
         if (Boolean.FALSE.equals(project.getIsApproved())) {
             throw new NotFoundException(String.format(PROJECT_NOT_FOUND, projectId));
         }
+
+        return projectMapper.entityToFullDto(project);
+    }
+
+    @Transactional
+    @Override
+    public FullProjectDto sponsorProject(UUID projectId, BigDecimal money, UUID personId) {
+        if (money.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Некорректная сумма для пополнения");
+        }
+
+        Project project = getProjectById(projectId);
+        Person person = profileService.getPersonById(personId);
+
+        if (person.getMoney().compareTo(money) < 0) {
+            throw new BadRequestException("Недостаточно средств");
+        }
+
+        person.setMoney(person.getMoney().subtract(money));
+        project.setCollectedAmount(project.getCollectedAmount().add(money));
+
+        if (project.getCollectedAmount().compareTo(project.getTargetAmount()) >= 0) {
+            project.setFinishDate(new Date());
+            project.setStatus(Status.FINISHED);
+        }
+
+        project = projectRepository.save(project);
+        personRepository.save(person);
 
         return projectMapper.entityToFullDto(project);
     }
@@ -136,6 +165,12 @@ public class ProjectServiceImpl implements ProjectService {
                 .withIgnoreCase()
                 .withIgnoreNullValues()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+    }
+
+    private Project getProjectById(UUID projectId) {
+        return projectRepository
+                .findById(projectId)
+                .orElseThrow(() -> new NotFoundException(String.format(PROJECT_NOT_FOUND, projectId)));
     }
 
 }

@@ -16,6 +16,7 @@ import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectPagingFilteringSortingRequest;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectService;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static ru.cft.shift.crowdfundingplatformapi.util.JwtExtractor.extractId;
@@ -51,4 +52,16 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getPublicProject(projectId));
     }
 
+    @Operation(
+            summary = "Спонсировать проект",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PostMapping("/{projectId}/sponsorship")
+    public ResponseEntity<FullProjectDto> sponsorProject(@PathVariable UUID projectId,
+                                                         @RequestParam BigDecimal money,
+                                                         Authentication authentication
+    ) {
+        UUID personId = extractId(authentication);
+        return ResponseEntity.ok(projectService.sponsorProject(projectId, money, personId));
+    }
 }
