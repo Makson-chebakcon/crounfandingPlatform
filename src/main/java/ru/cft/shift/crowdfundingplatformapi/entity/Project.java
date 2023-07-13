@@ -53,4 +53,8 @@ public class Project {
     @JoinColumn(name = "author_id")
     private Person author;
 
+    @OneToOne
+    @JoinColumn(name = "project_request_id")
+    private ProjectRequest request;
+
 }
