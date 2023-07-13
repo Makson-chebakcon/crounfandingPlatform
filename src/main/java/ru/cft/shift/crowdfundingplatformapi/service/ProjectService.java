@@ -1,6 +1,10 @@
 package ru.cft.shift.crowdfundingplatformapi.service;
 
-import ru.cft.shift.crowdfundingplatformapi.dto.project.*;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.CreateProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.FullProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectPagingFilteringSortingRequest;
 
 import java.util.UUID;
 

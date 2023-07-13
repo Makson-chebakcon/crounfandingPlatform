@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "api/v1/profiles").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "api/v1/profiles").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "api/v1/persons/*/role").hasRole(ADMIN)
+                                .requestMatchers(HttpMethod.POST, "api/v1/persons/search").hasRole(ADMIN)
                                 .requestMatchers(HttpMethod.POST, "api/v1/promo-codes").hasRole(ADMIN)
                                 .requestMatchers(HttpMethod.POST, "api/v1/promo-codes/*").authenticated()
                                 .requestMatchers(HttpMethod.POST, "api/v1/project-requests/**").hasAnyRole(ADMIN, MODER)

@@ -1,4 +1,4 @@
-package ru.cft.shift.crowdfundingplatformapi.dto.project;
+package ru.cft.shift.crowdfundingplatformapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

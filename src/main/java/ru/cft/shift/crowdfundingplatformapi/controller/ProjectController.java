@@ -9,7 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.shift.crowdfundingplatformapi.dto.project.*;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.CreateProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.FullProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.project.ProjectPagingFilteringSortingRequest;
 import ru.cft.shift.crowdfundingplatformapi.service.ProjectService;
 
 import java.util.UUID;

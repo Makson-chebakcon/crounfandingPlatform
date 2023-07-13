@@ -2,12 +2,12 @@ package ru.cft.shift.crowdfundingplatformapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.PersonDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
-import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.PagingResponse;
+import ru.cft.shift.crowdfundingplatformapi.dto.api.PagingParamsResponse;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.*;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
 import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.ConflictException;
@@ -21,6 +21,7 @@ import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
 import ru.cft.shift.crowdfundingplatformapi.util.CodeGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -120,10 +121,52 @@ public class ProfileServiceImpl implements ProfileService {
         return personMapper.entityToDto(getPersonById(personId));
     }
 
+    @Override
+    public PagingResponse<PersonDto> getProfiles(SearchPersonDto dto) {
+        Person person = Person.builder()
+                .name(dto.getName())
+                .surname(dto.getSurname())
+                .patronymic(dto.getPatronymic())
+                .build();
+
+        Example<Person> personExample = Example.of(person, buildExampleMatcher());
+        Pageable pageable = buildPageable(dto);
+
+        Page<Person> personPage = personRepository.findAll(personExample, pageable);
+
+        List<PersonDto> persons = personPage.getContent()
+                .stream()
+                .map(personMapper::entityToDto)
+                .toList();
+
+        PagingParamsResponse pagingParams = new PagingParamsResponse(
+                personPage.getTotalPages(),
+                personPage.getTotalElements(),
+                personPage.getNumber(),
+                persons.size()
+        );
+
+        return new PagingResponse<>(pagingParams, persons);
+    }
+
     private boolean personFits(Person person, String name, String surname, String patronymic) {
         return person.getName().equals(name)
                 && person.getSurname().equals(surname)
                 && person.getPatronymic().equals(patronymic);
+    }
+
+    private Pageable buildPageable(SearchPersonDto dto) {
+        return PageRequest.of(
+                dto.getPagingParams().getPage(),
+                dto.getPagingParams().getSize()
+        );
+    }
+
+    private ExampleMatcher buildExampleMatcher() {
+        return ExampleMatcher.matchingAll()
+                .withIgnoreCase()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
     }
 }
 
