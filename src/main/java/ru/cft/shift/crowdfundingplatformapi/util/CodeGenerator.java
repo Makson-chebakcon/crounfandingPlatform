@@ -1,26 +1,26 @@
 package ru.cft.shift.crowdfundingplatformapi.util;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class PasswordGenerator {
+public class CodeGenerator {
 
-    private final Random random;
-    private static final int PASSWORD_LENGTH = 16;
     private static final int MIN_LETTER = 65;
     private static final int MAX_LETTER = 91;
     private static final int LETTER_REGISTER_SHIFT = 32;
     private static final int MIN_DIGIT = 49;
     private static final int MAX_DIGIT = 58;
 
-    public String generatePassword() {
-        StringBuilder stringBuilder = new StringBuilder(PASSWORD_LENGTH);
+    private final Random random;
 
-        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+    public String generateCode(int length) {
+        StringBuilder stringBuilder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
             int randomInt = random.nextInt(MIN_LETTER, MAX_LETTER);
 
             randomInt = random.nextBoolean() ? randomInt : randomInt + LETTER_REGISTER_SHIFT;
