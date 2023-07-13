@@ -12,6 +12,7 @@ import ru.cft.shift.crowdfundingplatformapi.exception.BadRequestException;
 import ru.cft.shift.crowdfundingplatformapi.exception.ConflictException;
 import ru.cft.shift.crowdfundingplatformapi.exception.NotFoundException;
 import ru.cft.shift.crowdfundingplatformapi.mapper.PersonMapper;
+import ru.cft.shift.crowdfundingplatformapi.repository.MetaInformationRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.PersonRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.RefreshTokenRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.MailService;
@@ -32,6 +33,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MetaInformationRepository metaInformationRepository;
 
     @Override
     public FullPersonDto getFullPersonDto(UUID personId) {
@@ -97,11 +99,16 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public FullPersonDto updateProfile(UUID id, UpdatePersonDto dto) {
+        if (dto.getAvatarId() != null && !metaInformationRepository.existsById(dto.getAvatarId())) {
+            throw new NotFoundException("Файл с id " + dto.getAvatarId() + " не найден");
+        }
+
         Person person = getPersonById(id);
         person.setName(dto.getName());
         person.setSurname(dto.getSurname());
         person.setPatronymic(dto.getPatronymic());
         person.setBio(dto.getBio());
+        person.setAvatarId(dto.getAvatarId());
 
         person = personRepository.save(person);
         return personMapper.entityToFullDto(person);

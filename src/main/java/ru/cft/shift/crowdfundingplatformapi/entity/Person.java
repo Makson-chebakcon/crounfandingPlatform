@@ -58,4 +58,6 @@ public class Person {
     @OneToMany(mappedBy = "author")
     private List<Project> projects;
 
+    private UUID avatarId;
+
 }

@@ -17,4 +17,5 @@ public class PersonDto {
     private String surname;
     private String patronymic;
     private String email;
+    private UUID avatarId;
 }

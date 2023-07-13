@@ -53,7 +53,8 @@ public class RootAdminCreator {
                 null,
                 BigDecimal.ZERO,
                 Collections.emptyList(),
-                Collections.emptyList()
+                Collections.emptyList(),
+                null
         );
 
         personRepository.save(person);

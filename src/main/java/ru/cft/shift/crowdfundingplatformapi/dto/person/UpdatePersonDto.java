@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.UUID;
+
 import static ru.cft.shift.crowdfundingplatformapi.util.ValidationConstants.NAME_REGEX;
 
 @Data
@@ -23,4 +25,7 @@ public class UpdatePersonDto {
 
     @Length(max = 32000, message = "Раздел о себе не может превышать 32000 символов")
     private String bio;
+
+    private UUID avatarId;
+
 }

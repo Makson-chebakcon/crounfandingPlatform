@@ -21,4 +21,5 @@ public class FullPersonDto {
     private BigDecimal money;
     private String bio;
     private Boolean emailIsConfirm;
+    private UUID avatarId;
 }
