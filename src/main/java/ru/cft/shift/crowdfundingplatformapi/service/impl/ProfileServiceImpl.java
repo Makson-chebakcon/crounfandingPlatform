@@ -17,7 +17,7 @@ import ru.cft.shift.crowdfundingplatformapi.repository.PersonRepository;
 import ru.cft.shift.crowdfundingplatformapi.repository.RefreshTokenRepository;
 import ru.cft.shift.crowdfundingplatformapi.service.MailService;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
-import ru.cft.shift.crowdfundingplatformapi.util.PasswordGenerator;
+import ru.cft.shift.crowdfundingplatformapi.util.CodeGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
-    private final PasswordGenerator passwordGenerator;
+    private final CodeGenerator codeGenerator;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -76,7 +76,7 @@ public class ProfileServiceImpl implements ProfileService {
                 );
 
         if (personFits(person, dto.getName(), dto.getSurname(), dto.getPatronymic())) {
-            String newPassword = passwordGenerator.generatePassword();
+            String newPassword = codeGenerator.generateCode(12);
             person.setPassword(passwordEncoder.encode(newPassword));
             person = personRepository.save(person);
             log.info("Новый пароль для пользователя с id {} успешно сгенерирован и сохранен", person.getId());
