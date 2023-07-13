@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.PersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.service.ProfileService;
@@ -52,6 +53,12 @@ public class ProfileController {
                                                        @RequestBody @Valid UpdatePersonDto dto) {
         UUID id = extractId(authentication);
         return ResponseEntity.ok(profileService.updateProfile(id, dto));
+    }
+
+    @Operation(summary = "Получить профиль пользователя")
+    @GetMapping("/{personId}")
+    public ResponseEntity<PersonDto> getProfileById(@PathVariable UUID personId) {
+        return ResponseEntity.ok(profileService.getPersonDto(personId));
     }
 
 }

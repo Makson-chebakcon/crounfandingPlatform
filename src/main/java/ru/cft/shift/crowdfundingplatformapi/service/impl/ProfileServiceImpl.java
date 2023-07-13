@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.FullPersonDto;
+import ru.cft.shift.crowdfundingplatformapi.dto.person.PersonDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.ResetPasswordDto;
 import ru.cft.shift.crowdfundingplatformapi.dto.person.UpdatePersonDto;
 import ru.cft.shift.crowdfundingplatformapi.entity.Person;
@@ -112,6 +113,11 @@ public class ProfileServiceImpl implements ProfileService {
 
         person = personRepository.save(person);
         return personMapper.entityToFullDto(person);
+    }
+
+    @Override
+    public PersonDto getPersonDto(UUID personId) {
+        return personMapper.entityToDto(getPersonById(personId));
     }
 
     private boolean personFits(Person person, String name, String surname, String patronymic) {

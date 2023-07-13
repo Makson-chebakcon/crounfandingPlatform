@@ -69,3 +69,5 @@ security:
         method: POST
       - pattern: /api/v1/projects/*
         method: GET
+      - pattern: /api/v1/profiles/*
+        method: GET
